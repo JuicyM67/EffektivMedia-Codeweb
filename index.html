@@ -33,6 +33,7 @@
     <noscript><link rel="stylesheet" href="./assets/css/animate.min.css"></noscript>
     <!-- individual css -->
     <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/css/site-notice.css">
 
     <link rel="preload" as="image" href="./assets/images/stock/office-3.webp" imagesrcset="./assets/images/stock/office-3-640w.webp 640w, ./assets/images/stock/office-3-1080w.webp 1080w, ./assets/images/stock/office-3-1920w.webp 1920w, ./assets/images/stock/office-3.webp 2560w" imagesizes="100vw" fetchpriority="high">
     <!-- Favicon and Touch Icons  -->
@@ -273,6 +274,39 @@
             </div>
             <div class="container w-1750">
                 <div class="hero-photo-content">
+                    <!-- Inforuta: ärenden. Visas till och med 2026-12-19 och döljs därefter automatiskt (data-expires).
+                         Blocket, scriptet nedan och assets/css/site-notice.css kan tas bort efter det datumet. -->
+                    <div class="site-notice" id="siteNoticeArende" data-expires="2026-12-20T00:00:00+01:00" role="region" aria-label="Nyhet" hidden>
+                        <span class="site-notice-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path></svg>
+                        </span>
+                        <div class="site-notice-body">
+                            <div class="site-notice-title"><span class="site-notice-badge">Nyhet</span> Skapa ärenden direkt här på webben</div>
+                            <div class="site-notice-text">Är du kund och behöver hjälp? Skapa ett ärende, bifoga filer och följ det hela vägen tills det är löst – du får svar via mejl och på din egen ärendesida.</div>
+                            <a href="arende" class="site-notice-link">Skapa ärende <i class="icon-arrow-up-right"></i></a>
+                        </div>
+                        <button type="button" class="site-notice-close" aria-label="Stäng inforutan">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                    <script>
+                    (function () {
+                        var box = document.getElementById("siteNoticeArende");
+                        if (!box) return;
+                        var key = "em-notice-arende-dismissed";
+                        var dismissed = false;
+                        try { dismissed = window.localStorage.getItem(key) === "1"; } catch (e) {}
+                        if (dismissed || Date.now() >= Date.parse(box.getAttribute("data-expires"))) {
+                            box.parentNode.removeChild(box);
+                            return;
+                        }
+                        box.hidden = false;
+                        box.querySelector(".site-notice-close").addEventListener("click", function () {
+                            box.parentNode.removeChild(box);
+                            try { window.localStorage.setItem(key, "1"); } catch (e) {}
+                        });
+                    })();
+                    </script>
                     <div class="sub-title h6 letter-space--2 fw-5 split-text effect-right">
                         Digital byrå i Borås — <span>med resultat som märks.</span>
                     </div>
@@ -1564,6 +1598,7 @@
                                     </li>
                                     <li class="support-item-footer"><a href="vanliga-fragor" class="ff-2">Vanliga frågor</a></li>
                                     <li class="support-item-footer"><a href="kontakt" class="ff-2">Kontakta oss</a></li>
+                                    <li class="support-item-footer"><a href="arende" class="ff-2">Skapa ärende</a></li>
                                     <li class="support-item-footer"><a href="leadsportalen" class="ff-2">Leadsportalen</a></li>
                                     <li class="support-item-footer"><a href="cases" class="ff-2">Cases</a></li>
                                     <li class="support-item-footer"><a href="orter-vi-hjalper" class="ff-2">Orter vi hjälper</a></li>

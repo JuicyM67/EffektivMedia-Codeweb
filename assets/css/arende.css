@@ -1,0 +1,348 @@
+/* Ärenden: /arende (skapa ärende) och /arende/<token> (kundens ärendesida).
+   Bygger på variablerna och formulärstilarna i styles.css. */
+
+:root {
+  --arende-radius: 16px;
+  --arende-green: #12805c;
+  --arende-green-bg: #e6f6ef;
+  --arende-red: #c62828;
+  --arende-red-bg: #fdecec;
+  --arende-blue-bg: #eef0ff;
+}
+
+[hidden] { display: none !important; }
+button.tf-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font: inherit; }
+
+/* ---------- Layout ---------- */
+.arende-section { padding-top: 90px; padding-bottom: 120px; }
+.arende-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: start; }
+@media (min-width: 1200px) {
+  .arende-layout { grid-template-columns: 380px minmax(0, 1fr); gap: 60px; }
+  .arende-aside { position: sticky; top: 130px; }
+}
+@media (max-width: 991px) { .arende-section { padding-top: 50px; padding-bottom: 70px; } }
+
+.arende-card {
+  background: var(--white);
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--arende-radius);
+  padding: 40px;
+}
+@media (max-width: 575px) { .arende-card { padding: 24px 18px; } }
+.arende-card-soft { background: var(--digital-marketing-gray); border-color: transparent; }
+
+/* ---------- Aside: så fungerar det ---------- */
+.arende-steps { list-style: none; counter-reset: step; margin: 24px 0 0; }
+.arende-steps li { position: relative; padding-left: 56px; margin-bottom: 26px; counter-increment: step; }
+.arende-steps li:last-child { margin-bottom: 0; }
+.arende-steps li::before {
+  content: counter(step);
+  position: absolute; left: 0; top: -2px;
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--digital-marketing-blue); color: var(--white);
+  font-family: Manrope, sans-serif; font-weight: 700; font-size: 15px;
+}
+.arende-steps li:not(:last-child)::after {
+  content: ""; position: absolute; left: 18px; top: 42px; bottom: -22px;
+  width: 2px; background: rgba(11, 27, 230, .15);
+}
+.arende-steps strong { display: block; font-weight: 600; color: var(--digital-marketing-black); margin-bottom: 2px; }
+.arende-steps span { color: var(--paragraph); font-size: 15px; line-height: 24px; }
+
+.arende-aside-contact { margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--color-border-1); }
+.arende-aside-contact p { color: var(--paragraph); font-size: 15px; line-height: 24px; margin-bottom: 12px; }
+.arende-aside-contact a { color: var(--digital-marketing-black); font-weight: 600; }
+.arende-aside-contact a:hover { color: var(--digital-marketing-blue); }
+.arende-aside-contact ul { list-style: none; display: grid; gap: 8px; }
+
+/* ---------- Form ---------- */
+.arende-form-head { margin-bottom: 34px; }
+.arende-form-head h2 { font-size: clamp(26px, 2.4vw, 36px); line-height: 1.2; letter-spacing: -.03em; font-weight: 600; color: var(--digital-marketing-black); margin-bottom: 8px; }
+.arende-form-head p { color: var(--paragraph); }
+
+.arende-group { border: 0; padding: 0; margin: 0 0 34px; min-width: 0; }
+.arende-group-title {
+  display: flex; align-items: center; gap: 10px;
+  font-family: Manrope, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--digital-marketing-blue); margin-bottom: 18px;
+}
+.arende-group-title::after { content: ""; flex: 1; height: 1px; background: var(--color-border-1); }
+
+.arende-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+@media (min-width: 640px) { .arende-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.arende-grid + .arende-grid, .arende-grid + .arende-field, .arende-field + .arende-field { margin-top: 22px; }
+.arende-grid > .arende-field { margin-top: 0; }
+
+.form-contact .arende-field label,
+.arende-field > .arende-label {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  margin-bottom: 10px; font-family: Manrope, sans-serif; font-weight: 600; color: var(--digital-marketing-black);
+}
+.arende-optional { font-weight: 500; font-size: 13px; color: var(--paragraph); }
+.arende-counter { font-weight: 500; font-size: 13px; color: var(--paragraph); font-variant-numeric: tabular-nums; }
+.arende-help { margin-top: 8px; font-size: 14px; line-height: 22px; color: var(--paragraph); }
+
+.form-contact .arende-field input,
+.form-contact .arende-field textarea { color: var(--digital-marketing-black); }
+.form-contact .arende-field textarea { height: 190px; resize: vertical; min-height: 140px; }
+.form-contact input:focus-visible,
+.form-contact textarea:focus-visible {
+  border-color: var(--digital-marketing-blue) !important;
+  box-shadow: 0 0 0 3px rgba(11, 27, 230, .12);
+  background-color: var(--white);
+}
+.arende-field.is-invalid input,
+.arende-field.is-invalid textarea { border-color: var(--arende-red) !important; }
+.arende-field-error { display: none; margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--arende-red); }
+.arende-field.is-invalid .arende-field-error { display: block; }
+
+/* Request types as selectable cards */
+.arende-types { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.arende-type { position: relative; margin: 0; }
+.arende-type input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.form-contact .arende-type label {
+  display: flex; align-items: flex-start; gap: 12px; height: 100%; min-height: 64px; margin: 0;
+  padding: 16px; border: 1px solid var(--color-border-1); border-radius: 12px; cursor: pointer;
+  font-family: Manrope, sans-serif; font-weight: 600; font-size: 15px; line-height: 20px; color: var(--digital-marketing-black);
+  background: var(--white); transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+.arende-type label::before {
+  content: ""; flex: 0 0 20px; width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid rgba(31, 31, 31, .25); background: var(--white); transition: all .2s ease; margin-top: 1px;
+}
+.arende-type-text { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; text-align: left; }
+.arende-type-hint { font-family: Figtree, sans-serif; font-weight: 400; font-size: 13.5px; line-height: 20px; color: var(--paragraph); }
+.form-contact .arende-type label:hover { border-color: rgba(11, 27, 230, .4); background: var(--arende-blue-bg); }
+.form-contact .arende-type input:checked + label { border-color: var(--digital-marketing-blue); background: var(--arende-blue-bg); box-shadow: 0 0 0 1px var(--digital-marketing-blue); }
+.arende-type input:checked + label::before { border-color: var(--digital-marketing-blue); background: radial-gradient(circle, var(--digital-marketing-blue) 0 4px, var(--white) 5px); }
+.form-contact .arende-type input:focus-visible + label { box-shadow: 0 0 0 3px rgba(11, 27, 230, .25); }
+.arende-field.is-invalid .arende-type label { border-color: rgba(198, 40, 40, .5); }
+.arende-types-skeleton { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.arende-types-skeleton span { height: 84px; border-radius: 12px; }
+
+/* "Jag skriver för ett företag" */
+.arende-check { display: inline-flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; font-family: Manrope, sans-serif; font-weight: 600; color: var(--digital-marketing-black); }
+.form-contact .arende-field label.arende-check { display: inline-flex; justify-content: flex-start; align-items: center; margin: 0; }
+.arende-check input { width: 20px !important; height: 20px !important; accent-color: var(--digital-marketing-blue); margin: 0; flex: 0 0 auto; }
+.arende-company { margin-top: 20px; }
+
+/* Files */
+.arende-drop {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  padding: 28px 20px; border: 2px dashed rgba(31, 31, 31, .18); border-radius: 12px; text-align: center;
+  background: var(--digital-marketing-gray); cursor: pointer; transition: border-color .2s ease, background-color .2s ease;
+}
+.arende-drop:hover, .arende-drop.is-dragover { border-color: var(--digital-marketing-blue); background: var(--arende-blue-bg); }
+.arende-drop:focus-within { border-color: var(--digital-marketing-blue); }
+.arende-drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.arende-drop-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--white); color: var(--digital-marketing-blue); margin-bottom: 4px; }
+.arende-drop-icon svg { width: 22px; height: 22px; }
+.arende-drop-title { font-family: Manrope, sans-serif; font-weight: 600; color: var(--digital-marketing-black); }
+.arende-drop-title u { color: var(--digital-marketing-blue); text-underline-offset: 3px; }
+.arende-drop-hint { font-size: 13px; line-height: 20px; color: var(--paragraph); }
+
+.arende-files { list-style: none; margin: 12px 0 0; display: grid; gap: 8px; }
+.arende-files:empty { display: none; }
+.arende-file {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 14px;
+  border: 1px solid var(--color-border-1); border-radius: 10px; background: var(--white);
+}
+.arende-file-icon { flex: 0 0 auto; color: var(--digital-marketing-blue); display: flex; }
+.arende-file-icon svg { width: 20px; height: 20px; }
+.arende-file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--digital-marketing-black); }
+.arende-file-size { flex: 0 0 auto; font-size: 13px; color: var(--paragraph); font-variant-numeric: tabular-nums; }
+.form-contact .arende-file-remove,
+.arende-file-remove {
+  flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; border: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center; background: transparent; color: var(--paragraph); cursor: pointer;
+}
+.arende-file-remove:hover { background: var(--arende-red-bg); color: var(--arende-red); }
+.arende-file-remove svg { width: 16px; height: 16px; }
+
+/* Submit row */
+.arende-submit { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 24px; margin-top: 10px; }
+.arende-submit .tf-btn[disabled] { opacity: .65; pointer-events: none; }
+.arende-privacy { font-size: 14px; line-height: 22px; color: var(--paragraph); max-width: 420px; }
+.arende-privacy a { color: var(--digital-marketing-black); text-decoration: underline; text-underline-offset: 2px; }
+
+.arende-spinner {
+  display: inline-block; width: 16px; height: 16px; margin-right: 10px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent; animation: arende-spin .7s linear infinite;
+}
+@keyframes arende-spin { to { transform: rotate(360deg); } }
+
+/* Alerts */
+.arende-alert {
+  display: flex; gap: 12px; align-items: flex-start; padding: 16px 18px; border-radius: 12px;
+  font-weight: 500; line-height: 24px; margin-bottom: 26px;
+}
+.arende-alert[hidden] { display: none; }
+.arende-alert svg { flex: 0 0 20px; width: 20px; height: 20px; margin-top: 2px; }
+.arende-alert-error { background: var(--arende-red-bg); color: var(--arende-red); }
+.arende-alert-info { background: var(--arende-blue-bg); color: var(--digital-marketing-blue); }
+.arende-alert-success { background: var(--arende-green-bg); color: var(--arende-green); }
+
+/* Success */
+.arende-success { text-align: center; padding: 30px 0 10px; }
+.arende-success:focus { outline: none; }
+.arende-success-icon {
+  width: 84px; height: 84px; margin: 0 auto 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--digital-marketing-light); color: var(--digital-marketing-black);
+}
+.arende-success-icon svg { width: 40px; height: 40px; }
+.arende-success h2 { font-size: clamp(28px, 2.6vw, 38px); line-height: 1.2; letter-spacing: -.03em; font-weight: 600; color: var(--digital-marketing-black); margin-bottom: 12px; }
+.arende-success p { color: var(--paragraph); max-width: 520px; margin: 0 auto; }
+.arende-number {
+  display: inline-flex; align-items: center; gap: 10px; margin: 26px 0;
+  padding: 12px 22px; border-radius: 40px; background: var(--digital-marketing-gray);
+  font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; color: var(--digital-marketing-black); letter-spacing: .02em;
+}
+.arende-number small { font-weight: 600; font-size: 13px; color: var(--paragraph); letter-spacing: 0; }
+.arende-success-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 8px; }
+.arende-success-note { margin-top: 26px !important; font-size: 14px; line-height: 22px; }
+
+/* ---------- Ticket page ---------- */
+.ticket-hero .page-title-content { padding-bottom: 60px; }
+.ticket-hero .title { font-size: clamp(30px, 3.6vw, 52px) !important; overflow-wrap: anywhere; }
+.ticket-hero-meta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 14px; margin-top: 22px; }
+.ticket-chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 30px;
+  font-family: Manrope, sans-serif; font-weight: 600; font-size: 14px; line-height: 20px;
+  background: rgba(255, 255, 255, .1); color: var(--white); border: 1px solid rgba(255, 255, 255, .14);
+}
+
+.ticket-status {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 30px;
+  font-family: Manrope, sans-serif; font-weight: 700; font-size: 14px; line-height: 20px;
+}
+.ticket-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.ticket-status.is-open { background: var(--digital-marketing-light); color: var(--digital-marketing-black); }
+.ticket-status.is-solved { background: var(--arende-green-bg); color: var(--arende-green); }
+.ticket-status.is-closed { background: #e9eaee; color: #4a4d57; }
+
+.ticket-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; align-items: start; }
+@media (min-width: 1200px) {
+  .ticket-layout { grid-template-columns: minmax(0, 1fr) 360px; gap: 50px; }
+  .ticket-aside { position: sticky; top: 130px; }
+}
+@media (max-width: 1199px) { .ticket-aside { order: -1; } }
+
+.ticket-thread { list-style: none; display: grid; gap: 22px; margin: 0; }
+.ticket-msg { display: flex; gap: 14px; align-items: flex-start; }
+.ticket-avatar {
+  flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Manrope, sans-serif; font-weight: 700; font-size: 15px; text-transform: uppercase;
+  background: var(--digital-marketing-gray); color: var(--digital-marketing-black);
+}
+.ticket-msg.is-company .ticket-avatar { background: transparent; overflow: hidden; }
+.ticket-avatar img { width: 100%; height: auto; display: block; }
+.ticket-bubble {
+  flex: 1; min-width: 0; padding: 20px 24px; border-radius: 4px var(--arende-radius) var(--arende-radius) var(--arende-radius);
+  background: var(--white); border: 1px solid var(--color-border-1);
+}
+.ticket-msg.is-customer { flex-direction: row-reverse; }
+.ticket-msg.is-customer .ticket-bubble { background: var(--digital-marketing-gray); border-color: transparent; border-radius: var(--arende-radius) 4px var(--arende-radius) var(--arende-radius); }
+.ticket-msg.is-company .ticket-bubble { border-color: rgba(11, 27, 230, .18); box-shadow: 0 8px 30px -18px rgba(11, 27, 230, .35); }
+@media (min-width: 768px) {
+  .ticket-msg.is-customer { padding-left: 48px; }
+  .ticket-msg.is-company { padding-right: 48px; }
+}
+@media (max-width: 575px) {
+  .ticket-avatar { flex-basis: 34px; width: 34px; height: 34px; font-size: 13px; }
+  .ticket-bubble { padding: 16px; }
+}
+.ticket-msg-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
+.ticket-msg-author { font-family: Manrope, sans-serif; font-weight: 700; color: var(--digital-marketing-black); }
+.ticket-msg-tag { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; background: var(--arende-blue-bg); color: var(--digital-marketing-blue); }
+.ticket-msg-time { font-size: 13px; color: var(--paragraph); }
+.ticket-msg-body { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--digital-marketing-black); line-height: 27px; }
+.ticket-msg-first .ticket-msg-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--paragraph); margin-bottom: 6px; }
+
+.ticket-attachments { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.ticket-attachment {
+  display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
+  padding: 8px 12px; border-radius: 10px; background: var(--white); border: 1px solid var(--color-border-1);
+  font-size: 14px; font-weight: 600; color: var(--digital-marketing-black); transition: border-color .2s ease, color .2s ease;
+}
+.ticket-attachment:hover { border-color: var(--digital-marketing-blue); color: var(--digital-marketing-blue); }
+.ticket-attachment svg { flex: 0 0 16px; width: 16px; height: 16px; color: var(--digital-marketing-blue); }
+.ticket-attachment span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ticket-attachment small { font-weight: 500; color: var(--paragraph); white-space: nowrap; }
+
+.ticket-divider { display: flex; align-items: center; gap: 14px; color: var(--paragraph); font-size: 13px; font-weight: 600; }
+.ticket-divider::before, .ticket-divider::after { content: ""; flex: 1; height: 1px; background: var(--color-border-1); }
+
+.ticket-reply { margin-top: 34px; }
+.ticket-reply h2, .ticket-aside h2 { font-size: 22px; line-height: 1.3; letter-spacing: -.02em; font-weight: 600; color: var(--digital-marketing-black); margin-bottom: 6px; }
+.ticket-reply .arende-intro, .ticket-aside .arende-intro { color: var(--paragraph); font-size: 15px; line-height: 24px; margin-bottom: 20px; }
+.ticket-reply textarea { height: 150px !important; }
+.ticket-reply .arende-drop { padding: 18px; flex-direction: row; gap: 12px; text-align: left; }
+.ticket-reply .arende-drop-icon { margin: 0; flex: 0 0 auto; }
+
+.ticket-aside .arende-card { padding: 30px; }
+.ticket-status-text { color: var(--paragraph); font-size: 15px; line-height: 24px; margin: 16px 0 0; }
+.ticket-facts { list-style: none; margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--color-border-1); display: grid; gap: 10px; }
+.ticket-facts li { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+.ticket-facts span { color: var(--paragraph); }
+.ticket-facts strong { font-weight: 600; color: var(--digital-marketing-black); text-align: right; }
+.ticket-solve { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--color-border-1); }
+.ticket-solve p { font-size: 14px; line-height: 22px; color: var(--paragraph); margin-bottom: 14px; }
+.ticket-solve .tf-btn { max-width: 100%; width: 100%; }
+.ticket-solve .tf-btn .text-btn { flex: 1; }
+.ticket-btn-solve .text-btn, .ticket-btn-solve .icon-btn { background: var(--arende-green); color: var(--white); }
+.ticket-btn-solve:hover .text-btn, .ticket-btn-solve:hover .icon-btn { background: transparent; border-color: var(--arende-green); color: var(--arende-green); }
+.ticket-confirm { display: flex; gap: 10px; flex-wrap: wrap; }
+.ticket-confirm[hidden] { display: none; }
+.ticket-link-btn { border: 0; background: none; padding: 0; font-weight: 600; color: var(--paragraph); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.ticket-link-btn:hover { color: var(--digital-marketing-black); }
+.ticket-secure { margin-top: 18px; display: flex; gap: 12px; align-items: flex-start; font-size: 13px; line-height: 20px; color: var(--paragraph); }
+.ticket-secure svg { flex: 0 0 18px; width: 18px; height: 18px; margin-top: 1px; color: var(--digital-marketing-blue); }
+
+.ticket-closed { text-align: center; }
+.ticket-closed .tf-btn { margin: 18px auto 0; }
+
+/* Empty / error states */
+.ticket-state { text-align: center; max-width: 560px; margin: 0 auto; padding: 30px 0; }
+.ticket-state-icon { width: 76px; height: 76px; margin: 0 auto 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--digital-marketing-gray); color: var(--digital-marketing-blue); }
+.ticket-state-icon svg { width: 34px; height: 34px; }
+.ticket-state h2 { font-size: clamp(26px, 2.4vw, 34px); letter-spacing: -.03em; font-weight: 600; color: var(--digital-marketing-black); margin-bottom: 10px; }
+.ticket-state p { color: var(--paragraph); }
+.ticket-state .arende-success-actions { margin-top: 26px; }
+
+/* Skeleton */
+.arende-skel { background: linear-gradient(90deg, #eef0f3 0, #f7f8fa 50%, #eef0f3 100%); background-size: 200% 100%; animation: arende-shimmer 1.3s ease-in-out infinite; border-radius: 8px; display: block; }
+@keyframes arende-shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+.ticket-skel-msg { display: flex; gap: 14px; margin-bottom: 22px; }
+.ticket-skel-msg .arende-skel:first-child { flex: 0 0 44px; height: 44px; border-radius: 50%; }
+.ticket-skel-msg .arende-skel:last-child { flex: 1; height: 120px; border-radius: var(--arende-radius); }
+
+/* Toast */
+.arende-toast {
+  position: fixed; left: 50%; bottom: 28px; z-index: 1000; transform: translate(-50%, 20px); opacity: 0;
+  display: flex; align-items: center; gap: 10px; max-width: calc(100vw - 32px);
+  padding: 14px 22px; border-radius: 40px; background: var(--digital-marketing-dark); color: var(--white);
+  font-weight: 600; box-shadow: 0 16px 40px -12px rgba(8, 11, 30, .5); transition: opacity .25s ease, transform .25s ease; pointer-events: none;
+}
+.arende-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.arende-toast svg { width: 20px; height: 20px; color: var(--digital-marketing-light); flex: 0 0 auto; }
+
+.visually-hidden-focusable:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .arende-skel, .arende-spinner { animation: none; }
+  .arende-toast { transition: none; }
+}
+
+/* styles.css sätter font-size/line-height med !important på alla <p> */
+p.arende-help, p.arende-privacy, p.arende-success-note, p.arende-field-error, .ticket-solve p, .ticket-confirm p { font-size: 14px !important; line-height: 22px !important; }
+.arende-aside-contact p, p.arende-intro, p.ticket-status-text { font-size: 15px !important; line-height: 24px !important; }
+
+/* styles.css sätter storlek med !important på alla <h2> */
+.arende-form-head h2 { font-size: clamp(26px, 2.4vw, 36px) !important; line-height: 1.2 !important; }
+.arende-success h2 { font-size: clamp(28px, 2.6vw, 38px) !important; line-height: 1.2 !important; }
+.ticket-state h2 { font-size: clamp(26px, 2.4vw, 34px) !important; line-height: 1.25 !important; }
+.ticket-reply h2, .ticket-aside h2 { font-size: 22px !important; line-height: 1.3 !important; }
+.ticket-aside h2 { margin-bottom: 12px; }
