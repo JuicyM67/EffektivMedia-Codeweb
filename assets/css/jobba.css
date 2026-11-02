@@ -1,0 +1,42 @@
+/* Jobba hos oss: /jobba-hos-oss. Bygger på formulärstilarna i arende.css. */
+
+/* Hoppet från hero-knappen ska landa under den fasta menyn. */
+.jobba-card { scroll-margin-top: 130px; }
+
+/* Tjänsten: text till vänster, villkor till höger. På mobil kommer villkoren först. */
+.jobba-role-section { padding-bottom: 0; }
+.jobba-apply-section { padding-top: 90px; }
+@media (max-width: 991px) { .jobba-role-section { padding-bottom: 0; } .jobba-apply-section { padding-top: 60px; } }
+.jobba-role { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: start; }
+.jobba-role-aside { order: -1; }
+@media (min-width: 1200px) {
+  .jobba-role { grid-template-columns: minmax(0, 1fr) 420px; gap: 80px; }
+  .jobba-role-aside { order: 0; position: sticky; top: 130px; }
+}
+.jobba-subtitle { font-size: 22px; line-height: 30px; font-weight: 600; letter-spacing: -.02em; color: var(--digital-marketing-black); margin-bottom: 18px; }
+.jobba-projects { list-style: none; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+@media (min-width: 640px) { .jobba-projects { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.jobba-projects li { padding: 18px 20px; border-radius: 12px; background: var(--digital-marketing-gray); }
+.jobba-projects strong { display: block; font-family: Manrope, sans-serif; font-weight: 600; color: var(--digital-marketing-black); margin-bottom: 4px; }
+.jobba-projects span { display: block; font-size: 15px; line-height: 23px; color: var(--paragraph); }
+.jobba-more { margin: 14px 0 44px; font-weight: 500; color: var(--paragraph); }
+.jobba-perks.jobba-profile li { align-items: flex-start; font-family: inherit; font-weight: 500; color: var(--paragraph); }
+.jobba-perks.jobba-profile svg { margin-top: 3px; }
+.jobba-offer-cta { margin-top: 24px; }
+
+.jobba-offer { padding: 32px; }
+@media (max-width: 575px) { .jobba-offer { padding: 24px 18px; } }
+.jobba-pay { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0 22px; }
+.jobba-pay-item { padding: 16px; border-radius: 12px; background: var(--digital-marketing-light); color: var(--digital-marketing-black); }
+.jobba-pay-item strong { display: block; font-family: Manrope, sans-serif; font-weight: 700; font-size: 24px; line-height: 30px; letter-spacing: -.02em; white-space: nowrap; }
+.jobba-pay-item span { display: block; margin-top: 4px; font-size: 14px; line-height: 20px; }
+.jobba-perks { list-style: none; margin: 0; display: grid; gap: 10px; }
+.jobba-perks li { display: flex; align-items: center; gap: 12px; font-family: Manrope, sans-serif; font-weight: 600; color: var(--digital-marketing-black); }
+.jobba-perks svg { flex: 0 0 20px; width: 20px; height: 20px; color: var(--digital-marketing-blue); }
+.jobba-requirement { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--color-border-1); color: var(--digital-marketing-black); }
+.jobba-requirement strong { font-weight: 700; }
+
+.jobba-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 992px) { .jobba-options { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.form-contact .jobba-options .arende-type label { align-items: center; min-height: 56px; padding: 12px 14px; }
+.jobba-optional-text { height: 140px !important; }
