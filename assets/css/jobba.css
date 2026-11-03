@@ -27,6 +27,7 @@
 .jobba-offer { padding: 32px; }
 @media (max-width: 575px) { .jobba-offer { padding: 24px 18px; } }
 .jobba-pay { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0 22px; }
+@media (max-width: 575px) { .jobba-pay { grid-template-columns: minmax(0, 1fr); } }
 .jobba-pay-item { padding: 16px; border-radius: 12px; background: var(--digital-marketing-light); color: var(--digital-marketing-black); }
 .jobba-pay-item strong { display: block; font-family: Manrope, sans-serif; font-weight: 700; font-size: 24px; line-height: 30px; letter-spacing: -.02em; white-space: nowrap; }
 .jobba-pay-item span { display: block; margin-top: 4px; font-size: 14px; line-height: 20px; }
